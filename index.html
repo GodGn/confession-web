@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>耿緯的浪漫告白</title>
+<style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #ffdde1, #c1c8ff);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #333;
+      text-align: center;
+    }
+    #typewriter, #text-block {
+      white-space: pre-wrap;
+      font-size: 1.5em;
+      margin: 2em;
+    }
+    video {
+      width: 90vw;
+      max-width: 600px;
+      height: auto;
+      margin: 1em 0;
+    }
+    .btn {
+      background-color: #e8b8ff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      border-radius: 10px;
+      margin: 20px auto;
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+    .btn:active {
+      transform: scale(0.95);
+    }
+    .btn:hover {
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    }
+  </style>
+</head>
+<body>
+<div id="typewriter"></div>
+<video autoplay="" id="video" muted="" playsinline="" style="display: none;"></video>
+<div id="text-block"></div>
+<button class="btn" id="startBtn" style="display: none;">🚀 開始吧</button><button class="btn" id="nextBtn" style="display: none;">👉 繼續</button>
+<div id="choiceBtns" style="display: none;">
+<button class="btn" id="yesBtn">💖 YES</button>
+<button class="btn" id="noBtn">💔 NO</button>
+</div>
+<script>document.getElementById('yesBtn').onclick = handleYes;
+document.getElementById('noBtn').onclick = handleNo;
+
+const typewriter = document.getElementById('typewriter');
+const textBlock = document.getElementById('text-block');
+const video = document.getElementById('video');
+const nextBtn = document.getElementById('nextBtn');
+const choiceBtns = document.getElementById('choiceBtns');
+
+let index = 0;
+let yesCount = 0;
+let noCount = 0;
+
+const openingText = `嗨嗨!!!我耿緯啦!!!
+有些事情呢，想在這特別日子讓妳知道。`;
+
+const fullTexts = [
+  "還記得我們第一次見面，是在創設的研討會上。那時河馬老師悄悄地跟我說：你們教室裡，有位非常認真的朋友。當下我回頭望向妳，心裡冒出一個想法──哇嗚，這人自信又踏實，難怪是世輝的研究生，果然不簡單。",
+  "後來我們一起去了北港藝閣，在車上的對話讓我整個人被妳電得七零八落。怎麼會有人個性那麼好，笑起來那麼溫暖，又有活力、有溫柔、對家人孝順、對生活認真，還有滿滿的能力與魅力。我開始心動了，也默默展開了對妳的小小情報搜集。",
+  "那時我常問自己：是不是因為太久沒有談戀愛，所以才突然這麼渴望有人陪伴？還是，我是真的想好好開始一段關係？我不想讓這份感覺只是短暫的衝動，也還沒有機會跟妳真正深入認識。",
+  "直到那天，在高鐵站遇見妳。那天我真的好開心，開心得立刻傳訊給河馬老師，跟他說：我要帶西卡姐回家！我們在車上聊了好多──聊未來、聊工作，也更深入地理解了彼此。那些原本困惑的心情，在那天慢慢被釐清了。那一刻我突然明白，如果未來真的有一個人可以一起成長，一起分享快樂、分擔難過，一起走過平凡的日子，我最希望那個人是妳。",
+  "所以，容我重新自我介紹一下──你好，我是李耿緯，今年28歲。上一段感情是六年前的事了。雖然我沒有令人驚豔的外表，也稱不上擁有完美的身材，但我有滿滿的熱情、幽默感、努力向前的心，還有對家人與生活的珍惜，最重要的，是一顆真心喜歡妳的心。我想問問妳，是否可以給我一個機會，讓我好好把握？"
+];
+
+function typeText(text, container, callback) {
+  let i = 0;
+  container.textContent = '';
+  function typing() {
+    if (i < text.length) {
+      container.textContent += text[i++];
+      setTimeout(typing, 80);
+    } else if (callback) {
+      callback();
+    }
+  }
+  typing();
+}
+
+function showNextText() {
+  if (index < fullTexts.length) {
+    typeText(fullTexts[index], textBlock, () => {
+      nextBtn.style.display = 'inline-block';
+    });
+  } else {
+    nextBtn.style.display = 'none';
+    choiceBtns.style.display = 'block';
+  }
+}
+
+nextBtn.onclick = () => {
+  index++;
+  textBlock.textContent = '';
+  nextBtn.style.display = 'none';
+  showNextText();
+};
+
+function handleYes() {
+  yesCount++;
+  textBlock.textContent = '';
+  if (yesCount === 1) {
+    typeText("等等！妳是不是不小心按到的？再按一次確認看看", textBlock);
+  } else {
+    typeText("天啊！真的嗎！我太開心啦～", textBlock, () => {
+      setTimeout(() => {
+        textBlock.textContent = "";
+        video.src = "m_02.mp4";
+        video.style.display = "block";
+        video.play();
+        video.onended = () => {
+          video.style.display = "none";
+          textBlock.textContent = "";
+          choiceBtns.innerHTML = '<button class="btn" onclick="location.reload()">回首頁</button>' +
+                                 '<button class="btn" onclick="showFinalChoice()">上一頁</button>';
+        };
+      }, 2000);
+    });
+  }
+}
+
+function handleNo() {
+  noCount++;
+  textBlock.textContent = '';
+  if (noCount === 1) {
+    typeText("耿緯雖然沒多帥，但才華洋溢！考慮一下啦！", textBlock);
+  } else if (noCount === 2) {
+    typeText("這麼有創意的告白，可以說明在一起會很有趣～", textBlock);
+  } else {
+    typeText("好吧～事不過三，再次點擊 NO 讓我死心吧！", textBlock, () => {
+      setTimeout(() => {
+        textBlock.textContent = "";
+        video.src = "m_03.mp4";
+        video.style.display = "block";
+        video.play();
+        video.onended = () => {
+          video.style.display = "none";
+          textBlock.textContent = "";
+          choiceBtns.innerHTML = '<button class="btn" onclick="location.reload()">回首頁</button>' +
+                                 '<button class="btn" onclick="showFinalChoice()">上一頁</button>';
+        };
+      }, 2000);
+    });
+  }
+}
+
+function showFinalChoice() {
+  textBlock.textContent = fullTexts[fullTexts.length - 1];
+  choiceBtns.innerHTML = '<button class="btn" onclick="handleYes()">YES</button>' +
+                         '<button class="btn" onclick="handleNo()">NO</button>';
+}
+
+function startFlow() {
+  typeText(openingText, typewriter, () => {
+    typewriter.style.display = 'none';
+    showNextText();
+  });
+}
+
+video.onended = () => {
+  video.style.display = 'none';
+  showNextText();
+};
+
+video.onerror = () => {
+  video.style.display = 'none';
+  showNextText();
+};
+
+
+function startFlow() {
+  typeText(openingText, typewriter, () => {
+    document.getElementById('startBtn').style.display = 'inline-block';
+  });
+}
+
+document.getElementById('startBtn').onclick = () => {
+  document.getElementById('startBtn').style.display = 'none';
+  typewriter.style.display = 'none';
+  video.src = "m_01.mp4";
+  video.style.display = "block";
+  video.play();
+  video.onended = () => {
+    video.style.display = "none";
+    showNextText();
+  };
+};
+
+startFlow();
+
+</script>
+</body>
+</html>
